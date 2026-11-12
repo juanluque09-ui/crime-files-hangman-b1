@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <title>Crime Files Hangman</title>
+  <style>
+    :root{--ink:#101827;--paper:#f5efe2;--gold:#f4b942;--red:#d1495b;--green:#2a9d6f;--blue:#3973b7;--muted:#667085;--line:#d8cfbd}
+    *{box-sizing:border-box} body{margin:0;min-height:100vh;background:radial-gradient(circle at 20% 10%,#26364b 0,#101827 42%,#080d15 100%);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);padding:18px}
+    button{font:inherit} .app{width:min(1180px,100%);margin:auto;background:var(--paper);border-radius:24px;overflow:hidden;box-shadow:0 24px 70px #0008;border:1px solid #ffffff18}
+    header{background:linear-gradient(120deg,#172337,#0e1727);color:white;padding:18px 24px;display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+    .brand{display:flex;align-items:center;gap:14px}.badge{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:var(--gold);color:#111;font-size:28px;box-shadow:inset 0 0 0 4px #0002}.title h1{margin:0;font-size:clamp(1.4rem,3vw,2.25rem);letter-spacing:.04em}.title p{margin:3px 0 0;color:#cbd5e1;font-weight:600}
+    .head-actions{display:flex;gap:9px;align-items:center}.icon-btn,.new-btn{border:0;border-radius:12px;padding:11px 14px;cursor:pointer;font-weight:800}.icon-btn{background:#ffffff14;color:white}.new-btn{background:var(--gold);color:#1d1d1d}.icon-btn:hover,.new-btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+    .topbar{display:grid;grid-template-columns:1.2fr 1fr;gap:14px;padding:16px 22px;background:#ede4d4;border-bottom:1px solid var(--line)}
+    .categories,.teams{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.label{font-weight:900;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:#54504a;margin-right:3px}.chip{border:1px solid #b7aa95;background:#fffaf0;padding:8px 11px;border-radius:999px;cursor:pointer;font-weight:800;color:#39342e}.chip.active{background:var(--ink);color:white;border-color:var(--ink)}
+    .team{border:2px solid transparent;border-radius:12px;padding:8px 11px;background:#fffaf0;font-weight:900;display:flex;gap:8px;align-items:center}.team.current{border-color:var(--gold);box-shadow:0 0 0 3px #f4b94230}.team b{font-size:1.15rem}.team1{color:#255b98}.team2{color:#a33745}
+    main{display:grid;grid-template-columns:minmax(280px,.8fr) minmax(380px,1.5fr);gap:18px;padding:22px}
+    .panel{background:#fffaf0;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 7px 18px #1e293b0d}.case-label{text-transform:uppercase;font-size:.78rem;letter-spacing:.13em;color:#6f685e;font-weight:900}.category-name{font-size:1.25rem;font-weight:950;margin-top:4px}.gallows{display:grid;place-items:center;min-height:330px;margin-top:8px}.gallows svg{width:min(100%,330px);height:auto}.draw{stroke:#202733;stroke-width:8;stroke-linecap:round;fill:none;opacity:0;transition:opacity .25s,transform .25s;transform-origin:center}.draw.show{opacity:1;transform:scale(1)}
+    .lives{display:flex;justify-content:center;gap:6px;margin-top:-8px}.life{font-size:22px;transition:.2s}.life.lost{opacity:.18;filter:grayscale(1);transform:scale(.82)}
+    .word-area{min-height:145px;display:flex;flex-direction:column;align-items:center;justify-content:center}.word{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 14px;margin:12px auto 8px}.word-part{display:flex;gap:5px}.slot{width:34px;height:47px;border-bottom:4px solid var(--ink);display:grid;place-items:center;font-size:1.75rem;font-weight:950;text-transform:uppercase}.slot.revealed{animation:pop .25s ease}.punct{display:grid;place-items:end center;font-size:1.7rem;font-weight:950;min-width:12px;height:47px}@keyframes pop{50%{transform:scale(1.22);color:var(--green)}}
+    .status{text-align:center;min-height:30px;font-size:1.05rem;font-weight:900;margin-top:7px}.status.good{color:#187a50}.status.bad{color:#b02b3d}
+    .keyboard{display:grid;grid-template-columns:repeat(10,1fr);gap:7px;margin:15px auto 8px;max-width:720px}.key{min-height:42px;border:0;border-radius:9px;background:#172337;color:white;font-weight:950;cursor:pointer;box-shadow:0 3px 0 #070b12}.key:hover:not(:disabled){background:#2a405f;transform:translateY(-1px)}.key:active:not(:disabled){transform:translateY(2px);box-shadow:none}.key:disabled{cursor:default;opacity:.25}.key.hit{background:var(--green);opacity:.5}.key.miss{background:var(--red);opacity:.45}
+    .controls{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:15px}.control{border:0;border-radius:11px;padding:11px 15px;background:#ded2bf;color:#29251f;font-weight:900;cursor:pointer}.control.primary{background:var(--gold)}.control:hover{filter:brightness(.96)}
+    .rules{padding:0 22px 22px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.rule{background:#ece3d3;border-radius:14px;padding:13px 15px;border-left:5px solid var(--blue)}.rule:nth-child(2){border-color:var(--gold)}.rule:nth-child(3){border-color:var(--green)}.rule b{display:block;margin-bottom:3px}.rule span{color:#5b554d;font-size:.92rem}
+    .modal{position:fixed;inset:0;background:#050912cc;display:none;place-items:center;padding:20px;z-index:5}.modal.show{display:grid}.modal-card{width:min(520px,100%);background:var(--paper);border-radius:22px;padding:28px;text-align:center;box-shadow:0 25px 90px #000}.result-icon{font-size:64px}.modal h2{font-size:2rem;margin:8px 0}.answer{font-size:1.55rem;font-weight:950;color:var(--blue);text-transform:uppercase;margin:12px}.modal p{color:#5e574e}.modal-actions{display:flex;justify-content:center;gap:10px;margin-top:18px}.modal-actions button{border:0;border-radius:12px;padding:12px 18px;font-weight:900;cursor:pointer}.continue{background:var(--gold)}.reset{background:#ded2bf}
+    @media(max-width:840px){.topbar{grid-template-columns:1fr}.teams{justify-content:flex-start}main{grid-template-columns:1fr}.gallows{min-height:250px}.keyboard{grid-template-columns:repeat(7,1fr)}.rules{grid-template-columns:1fr}.slot{width:27px;font-size:1.45rem}}
+    @media(max-width:480px){body{padding:0}.app{border-radius:0;min-height:100vh}header{padding:14px}.topbar,main{padding:14px}.keyboard{grid-template-columns:repeat(6,1fr);gap:6px}.key{min-height:40px}.slot{width:22px;height:39px;font-size:1.25rem}.word{gap:7px 10px}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand"><div class="badge">🕵️</div><div class="title"><h1>CRIME FILES HANGMAN</h1><p>Unit 2 vocabulary investigation</p></div></div>
+      <div class="head-actions"><button class="icon-btn" id="soundBtn" aria-label="Turn sound off">🔊 Sound</button><button class="new-btn" id="newBtn">New case</button></div>
+    </header>
+    <section class="topbar">
+      <div class="categories"><span class="label">Case type</span><button class="chip active" data-category="all">Mixed</button><button class="chip" data-category="crimes">Crimes</button><button class="chip" data-category="criminals">Criminals</button><button class="chip" data-category="detective">Detective work</button></div>
+      <div class="teams"><span class="label">Teams</span><div class="team team1 current" id="team1">Blue Detectives <b id="score1">0</b></div><div class="team team2" id="team2">Red Detectives <b id="score2">0</b></div></div>
+    </section>
+    <main>
+      <section class="panel">
+        <div class="case-label">Current file</div><div class="category-name" id="categoryName">Mixed vocabulary</div>
+        <div class="gallows" aria-label="Hangman drawing">
+          <svg viewBox="0 0 360 360" role="img">
+            <path d="M48 326 H318" stroke="#735f43" stroke-width="14" stroke-linecap="round"/><path d="M92 326 V32 H242 V75" stroke="#202733" stroke-width="10" fill="none" stroke-linecap="round"/><path d="M92 65 L128 32" stroke="#202733" stroke-width="8"/>
+            <line class="draw" id="d1" x1="242" y1="75" x2="242" y2="106"/>
+            <circle class="draw" id="d2" cx="242" cy="139" r="31"/>
+            <line class="draw" id="d3" x1="242" y1="171" x2="242" y2="247"/>
+            <line class="draw" id="d4" x1="242" y1="190" x2="194" y2="226"/>
+            <line class="draw" id="d5" x1="242" y1="190" x2="290" y2="226"/>
+            <line class="draw" id="d6" x1="242" y1="247" x2="202" y2="300"/>
+            <line class="draw" id="d7" x1="242" y1="247" x2="282" y2="300"/>
+          </svg>
+        </div>
+        <div class="lives" id="lives" aria-label="Seven lives remaining"></div>
+      </section>
+      <section class="panel">
+        <div class="case-label">Decode the evidence</div>
+        <div class="word-area"><div class="word" id="word"></div><div class="status" id="status" aria-live="polite"></div></div>
+        <div class="keyboard" id="keyboard" aria-label="Letter keyboard"></div>
+        <div class="controls"><button class="control" id="hintBtn">Reveal a letter −2 points</button><button class="control" id="switchBtn">Switch team</button><button class="control primary" id="solveBtn">Solve the case</button></div>
+      </section>
+    </main>
+    <section class="rules"><div class="rule"><b>Correct letter</b><span>Earn 1 point for every newly revealed letter.</span></div><div class="rule"><b>Complete the word</b><span>The current team receives a 5-point bonus.</span></div><div class="rule"><b>Wrong letter</b><span>The other detective team takes the next turn.</span></div></section>
+  </div>
+  <div class="modal" id="modal"><div class="modal-card"><div class="result-icon" id="resultIcon">🔍</div><h2 id="resultTitle">Case closed</h2><div class="answer" id="answer"></div><p id="resultText"></p><div class="modal-actions"><button class="reset" id="resetScores">Reset scores</button><button class="continue" id="continueBtn">Next case</button></div></div></div>
+  <script>
+  const entries=[
+    {w:'arson',c:'crimes',d:'The crime of deliberately setting fire to a building or property.'},{w:'burglary',c:'crimes',d:'Entering a building illegally in order to steal.'},{w:'cybercrime',c:'crimes',d:'Crime committed using computers or the internet.'},{w:'kidnapping',c:'crimes',d:'Taking and holding a person illegally.'},{w:'mugging',c:'crimes',d:'Attacking and robbing someone in a public place.'},{w:'murder',c:'crimes',d:'The crime of deliberately killing someone.'},{w:'robbery',c:'crimes',d:'Stealing from a person or place, often using force.'},{w:'theft',c:'crimes',d:'Taking something that belongs to another person.'},{w:'shoplifting',c:'crimes',d:'Stealing goods from a shop.'},{w:'smuggling',c:'crimes',d:'Moving illegal goods secretly into or out of a country.'},{w:'vandalism',c:'crimes',d:'Deliberately damaging public or private property.'},
+    {w:'arsonist',c:'criminals',d:'A person who deliberately sets fire to property.'},{w:'burglar',c:'criminals',d:'A person who enters a building illegally to steal.'},{w:'cybercriminal',c:'criminals',d:'A person who commits crimes using computers or the internet.'},{w:'hacker',c:'criminals',d:'A person who gains unauthorised access to a computer system.'},{w:'kidnapper',c:'criminals',d:'A person who takes and holds someone illegally.'},{w:'mugger',c:'criminals',d:'A person who attacks and robs someone in public.'},{w:'murderer',c:'criminals',d:'A person who deliberately kills another person.'},{w:'robber',c:'criminals',d:'A person who steals using force or threats.'},{w:'thief',c:'criminals',d:'A person who steals something.'},{w:'shoplifter',c:'criminals',d:'A person who steals goods from a shop.'},{w:'smuggler',c:'criminals',d:'A person who secretly transports illegal goods.'},{w:'vandal',c:'criminals',d:'A person who deliberately damages property.'},
+    {w:'accuse a suspect',c:'detective',d:'Say that someone may be responsible for a crime.'},{w:'analyse evidence',c:'detective',d:'Examine clues carefully and decide what they mean.'},{w:'arrest a suspect',c:'detective',d:'Take a person into police custody.'},{w:'charge a suspect',c:'detective',d:'Formally state that a person committed a crime.'},{w:'investigate a case',c:'detective',d:'Try to discover what happened and who was responsible.'},{w:'prove something',c:'detective',d:'Use facts or evidence to show that an idea is true.'},{w:'question a witness',c:'detective',d:'Ask someone who saw or heard something about the crime.'},{w:'search for evidence',c:'detective',d:'Look carefully for objects or information that may help.'}
+  ];
+  const labels={all:'Mixed vocabulary',crimes:'Crimes',criminals:'Criminals',detective:'Detective work'};
+  let category='all',current=null,guessed=new Set(),mistakes=0,team=1,scores=[0,0],sound=true,lastWord='';
+  const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+  function tone(freq,duration,type='sine',delay=0){if(!sound)return;const A=window.AudioContext||window.webkitAudioContext;const ctx=tone.ctx||(tone.ctx=new A());const o=ctx.createOscillator(),g=ctx.createGain();o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(.08,ctx.currentTime+delay);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+delay+duration);o.connect(g);g.connect(ctx.destination);o.start(ctx.currentTime+delay);o.stop(ctx.currentTime+delay+duration)}
+  function sfx(kind){if(kind==='hit'){tone(520,.08);tone(680,.1,'sine',.07)}else if(kind==='miss'){tone(150,.18,'sawtooth')}else if(kind==='win'){[523,659,784,1047].forEach((n,i)=>tone(n,.18,'triangle',i*.1))}else if(kind==='lose'){[330,277,220,165].forEach((n,i)=>tone(n,.2,'sawtooth',i*.12))}}
+  function buildKeyboard(){const k=$('#keyboard');k.innerHTML='';'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(l=>{const b=document.createElement('button');b.className='key';b.textContent=l;b.dataset.letter=l.toLowerCase();b.addEventListener('click',()=>guess(b.dataset.letter));k.appendChild(b)})}
+  function choose(){let pool=entries.filter(e=>category==='all'||e.c===category);if(pool.length>1)pool=pool.filter(e=>e.w!==lastWord);current=pool[Math.floor(Math.random()*pool.length)];lastWord=current.w;guessed=new Set();mistakes=0;$('#categoryName').textContent=labels[current.c]||labels[category];$('#status').textContent='';$('#status').className='status';$$('.key').forEach(b=>{b.disabled=false;b.className='key'});$$('.draw').forEach(x=>x.classList.remove('show'));renderLives();renderWord();updateTeams()}
+  function renderWord(){const root=$('#word');root.innerHTML='';current.w.split(' ').forEach(part=>{const wrap=document.createElement('div');wrap.className='word-part';for(const ch of part){if(/[a-z]/i.test(ch)){const s=document.createElement('span');s.className='slot';if(guessed.has(ch.toLowerCase())){s.textContent=ch;s.classList.add('revealed')}wrap.appendChild(s)}else{const p=document.createElement('span');p.className='punct';p.textContent=ch;wrap.appendChild(p)}}root.appendChild(wrap)})}
+  function renderLives(){const root=$('#lives');root.innerHTML='';for(let i=0;i<7;i++){const x=document.createElement('span');x.className='life'+(i<mistakes?' lost':'');x.textContent='🔎';root.appendChild(x)}root.setAttribute('aria-label',`${7-mistakes} lives remaining`)}
+  function updateTeams(){$('#score1').textContent=scores[0];$('#score2').textContent=scores[1];$('#team1').classList.toggle('current',team===1);$('#team2').classList.toggle('current',team===2)}
+  function switchTeam(){team=team===1?2:1;updateTeams();$('#status').textContent=`Red Detectives' turn`;if(team===1)$('#status').textContent=`Blue Detectives' turn`}
+  function solved(){return [...current.w.toLowerCase()].every(ch=>!/[a-z]/.test(ch)||guessed.has(ch))}
+  function guess(letter){if(!current||guessed.has(letter)||mistakes>=7)return;guessed.add(letter);const count=[...current.w.toLowerCase()].filter(x=>x===letter).length;const btn=$(`.key[data-letter="${letter}"]`);btn.disabled=true;if(count){btn.classList.add('hit');scores[team-1]+=count;$('#status').textContent=`Correct! +${count} point${count>1?'s':''}`;$('#status').className='status good';sfx('hit')}else{btn.classList.add('miss');mistakes++;$(`#d${mistakes}`).classList.add('show');$('#status').textContent='No evidence there — teams switch.';$('#status').className='status bad';sfx('miss');switchTeam()}renderLives();renderWord();updateTeams();if(solved()){scores[team-1]+=5;updateTeams();setTimeout(()=>finish(true),450)}else if(mistakes>=7)setTimeout(()=>finish(false),450)}
+  function finish(win){if(win){sfx('win');$('#resultIcon').textContent='🏆';$('#resultTitle').textContent='Case closed!';$('#resultText').textContent=`Team ${team} earns a 5-point bonus.`}else{sfx('lose');$('#resultIcon').textContent='🚨';$('#resultTitle').textContent='The criminal escaped!';$('#resultText').textContent='Study the evidence and open a new case.'}$('#answer').textContent=current.w;$('#modal').classList.add('show')}
+  function revealHint(){const missing=[...new Set([...current.w.toLowerCase()].filter(ch=>/[a-z]/.test(ch)&&!guessed.has(ch)))];if(!missing.length)return;scores[team-1]=Math.max(0,scores[team-1]-2);const l=missing[Math.floor(Math.random()*missing.length)];guessed.add(l);const btn=$(`.key[data-letter="${l}"]`);if(btn){btn.disabled=true;btn.classList.add('hit')}renderWord();updateTeams();$('#status').textContent=`Forensic hint: the letter ${l.toUpperCase()} was revealed.`;$('#status').className='status';if(solved()){scores[team-1]+=5;updateTeams();setTimeout(()=>finish(true),400)}}
+  function solvePrompt(){const answer=prompt('Detective, enter the complete word or expression:');if(answer===null)return;if(answer.trim().toLowerCase()===current.w){[...current.w].forEach(ch=>guessed.add(ch.toLowerCase()));renderWord();scores[team-1]+=5;updateTeams();finish(true)}else{mistakes++;if(mistakes<=7)$(`#d${mistakes}`).classList.add('show');renderLives();sfx('miss');switchTeam();$('#status').textContent='That solution is incorrect — teams switch.';$('#status').className='status bad';if(mistakes>=7)finish(false)}}
+  $$('.chip').forEach(b=>b.addEventListener('click',()=>{$$('.chip').forEach(x=>x.classList.remove('active'));b.classList.add('active');category=b.dataset.category;choose()}));
+  $('#newBtn').onclick=choose;$('#hintBtn').onclick=revealHint;$('#switchBtn').onclick=switchTeam;$('#solveBtn').onclick=solvePrompt;$('#continueBtn').onclick=()=>{$('#modal').classList.remove('show');switchTeam();choose()};$('#resetScores').onclick=()=>{scores=[0,0];team=1;updateTeams();$('#modal').classList.remove('show');choose()};$('#soundBtn').onclick=()=>{sound=!sound;$('#soundBtn').textContent=sound?'🔊 Sound':'🔇 Muted';$('#soundBtn').setAttribute('aria-label',sound?'Turn sound off':'Turn sound on')};
+  document.addEventListener('keydown',e=>{const l=e.key.toLowerCase();if(/^[a-z]$/.test(l))guess(l);if(e.key==='Enter'&&$('#modal').classList.contains('show')){$('#modal').classList.remove('show');switchTeam();choose()}});
+  buildKeyboard();choose();
+  </script>
+</body>
+</html>
