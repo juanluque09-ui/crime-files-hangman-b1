@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Phrasal Verb Investigation</title>
+<style>
+:root{
+  --navy:#15243a;--blue:#2f70bd;--gold:#f5b940;--cream:#f5efe3;
+  --paper:#fffdf8;--green:#23865e;--red:#c9434d;--ink:#111827;
+  --muted:#647184;--line:#d8d1c5
+}
+*{box-sizing:border-box}
+body{
+  margin:0;min-height:100vh;color:var(--ink);
+  font-family:Arial,Helvetica,sans-serif;
+  background:linear-gradient(135deg,#0e1726,#1d3653)
+}
+button,select{font:inherit}button{cursor:pointer}
+header{
+  padding:18px 20px;color:white;background:#101c2d;
+  border-bottom:4px solid var(--gold)
+}
+.header-inner{
+  max-width:1150px;margin:auto;display:flex;align-items:center;
+  justify-content:space-between;gap:18px
+}
+.brand{display:flex;align-items:center;gap:14px}
+.badge{
+  width:62px;height:62px;border-radius:50%;display:grid;place-items:center;
+  background:var(--gold);font-size:34px;border:4px solid #ffe29b
+}
+h1{margin:0;font-size:clamp(22px,4vw,36px);letter-spacing:1px}
+.subtitle{margin:5px 0 0;color:#d0d9e5}
+.score-box{
+  min-width:110px;text-align:center;padding:10px 14px;border-radius:13px;
+  background:#213753;border:1px solid #4b6582
+}
+.score-box strong{display:block;color:var(--gold);font-size:26px}
+main{max-width:1150px;margin:24px auto;padding:0 16px 40px}
+.progress-shell{
+  display:flex;align-items:center;gap:14px;padding:12px 16px;
+  margin-bottom:18px;border-radius:14px;background:#263c59;color:white
+}
+.progress-track{
+  flex:1;height:12px;border-radius:20px;background:#101b2b;overflow:hidden
+}
+.progress-fill{
+  width:0;height:100%;background:linear-gradient(90deg,var(--gold),#ffe49a);
+  transition:.4s
+}
+nav{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  overflow:hidden;border-radius:16px 16px 0 0;background:white
+}
+nav button{
+  border:0;border-right:1px solid #cbc6bc;padding:15px 8px;
+  background:#e9e5dc;color:var(--ink);font-weight:bold
+}
+nav button.active{
+  color:var(--blue);background:var(--paper);box-shadow:inset 0 5px var(--blue)
+}
+.panel{
+  display:none;min-height:570px;padding:clamp(18px,4vw,34px);
+  border-radius:0 0 18px 18px;background:var(--paper)
+}
+.panel.active{display:block}
+.section-title{margin:0 0 8px;font-size:28px}
+.lead{margin-top:0;color:var(--muted);line-height:1.5}
+.info-strip{
+  margin:18px 0;padding:13px 16px;border-left:5px solid var(--blue);
+  border-radius:8px;background:#eaf2fb
+}
+.card-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.verb-card,.activity-card,.quiz-box{
+  padding:17px;border:2px solid var(--line);border-radius:14px;background:white;
+  box-shadow:0 4px 10px rgba(0,0,0,.05)
+}
+.verb-card h3{margin:0;color:var(--blue);font-size:22px}
+.tag{
+  display:inline-block;margin-top:8px;padding:4px 9px;border-radius:20px;
+  background:#edf1f5;color:#526175;font-size:12px;font-weight:bold
+}
+.definition{display:none;margin:14px 0 6px;color:var(--green);font-weight:bold}
+.example{display:none;color:#515c6d;font-style:italic;line-height:1.45}
+.reveal,.speak,.primary,.secondary,.danger{
+  border:0;border-radius:9px;padding:9px 13px;font-weight:bold
+}
+.reveal,.secondary{background:var(--gold);color:#30270e}
+.speak{background:#e4edf7;color:var(--navy)}
+.primary{background:var(--blue);color:white}
+.danger{background:#ebe7df;color:#4a4a4a}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+.activity-card{margin:12px 0}
+.activity-card.correct,.case-line.correct{border-color:var(--green);background:#edfaf4}
+.activity-card.incorrect,.case-line.incorrect{border-color:var(--red);background:#fff0f1}
+.activity-card label{font-weight:bold;line-height:1.45}
+.activity-card select{
+  width:100%;margin-top:9px;padding:10px;border:1px solid #aeb7c2;
+  border-radius:8px;background:white;color:var(--ink)
+}
+.feedback{min-height:22px;margin-top:10px;font-weight:bold;color:var(--ink)}
+.good{color:var(--green)}.bad{color:var(--red)}
+.case-file{
+  position:relative;margin-top:18px;padding:20px;border:2px dashed #947e5f;
+  border-radius:14px;background:#f4e8d1
+}
+.case-file:before{
+  content:"CONFIDENTIAL";position:absolute;right:18px;top:13px;
+  padding:4px 7px;border:3px solid #b64747;color:#b64747;
+  font-weight:bold;transform:rotate(5deg);opacity:.75
+}
+.case-line{
+  margin:15px 0;padding:12px;border:2px solid transparent;
+  border-radius:9px;background:rgba(255,255,255,.75);line-height:1.55
+}
+.case-line select{
+  padding:7px;border:2px solid #947e5f;border-radius:7px;
+  background:white;color:var(--blue);font-weight:bold
+}
+.mini-key{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:18px 0
+}
+.mini-key div{
+  padding:10px;border-radius:8px;background:#edf1f5;
+  color:var(--blue);font-weight:bold;text-align:center
+}
+
+/* High-contrast final challenge */
+.quiz-box{
+  margin-top:16px;padding:24px;background:#ffffff;color:#111827;
+  border:3px solid #bcc7d4
+}
+.quiz-progress{
+  display:inline-block;padding:6px 11px;border-radius:20px;
+  background:var(--navy);color:#fff;font-size:14px;font-weight:bold
+}
+.quiz-question{
+  display:block!important;visibility:visible!important;opacity:1!important;
+  min-height:90px;margin:18px 0;padding:20px;
+  border:3px solid #e7ad25;border-left:9px solid var(--gold);
+  border-radius:12px;background:#fff1c8;color:#111827!important;
+  font-size:clamp(20px,3vw,28px);font-weight:800;line-height:1.45
+}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.option{
+  min-height:56px;padding:14px;border:2px solid #8190a3;border-radius:10px;
+  background:#f5f7fa;color:#111827!important;text-align:left;font-weight:bold
+}
+.option:hover{border-color:var(--blue);background:#eaf3ff}
+.option.correct{border-color:var(--green);background:#dcf5e9;color:#145b41!important}
+.option.wrong{border-color:var(--red);background:#ffe0e3;color:#8e2630!important}
+.option:disabled{cursor:default;opacity:1}
+.result{
+  display:none;margin-top:20px;padding:28px;border-radius:14px;
+  background:#edf5ff;color:#111827;text-align:center
+}
+.result .big{margin:0;font-size:52px}
+.question-counter{
+  margin-top:12px;color:#435168;font-size:14px;font-weight:bold
+}
+.toast{
+  position:fixed;z-index:30;bottom:20px;left:50%;
+  transform:translateX(-50%) translateY(120px);
+  padding:13px 22px;border-radius:30px;background:#17283f;color:white;
+  font-weight:bold;box-shadow:0 8px 25px #0005;transition:.35s
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+footer{text-align:center;margin-top:18px;color:#ced7e3;font-size:13px}
+@media(max-width:760px){
+  nav{grid-template-columns:1fr 1fr}
+  .card-grid,.options{grid-template-columns:1fr}
+  .mini-key{grid-template-columns:1fr 1fr}
+  .case-file:before{position:static;display:inline-block;margin-bottom:10px}
+  .header-inner{align-items:flex-start}
+  .score-box{min-width:90px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="badge">🕵️</div>
+      <div>
+        <h1>PHRASAL VERB INVESTIGATION</h1>
+        <p class="subtitle">Unit 2 · Investigating and finding · B1</p>
+      </div>
+    </div>
+    <div class="score-box">
+      POINTS
+      <strong id="score">0</strong>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="progress-shell">
+    <span>Case progress</span>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <strong id="progressText">0%</strong>
+  </div>
+
+  <nav>
+    <button class="tab active" data-target="learn">1. Evidence Board</button>
+    <button class="tab" data-target="match">2. Match the Clues</button>
+    <button class="tab" data-target="case">3. Solve the Case</button>
+    <button class="tab" data-target="quiz">4. Final Challenge</button>
+  </nav>
+
+  <section class="panel active" id="learn">
+    <h2 class="section-title">Evidence Board</h2>
+    <p class="lead">Study the eight phrasal verbs. Reveal the meaning and listen to the example.</p>
+    <div class="info-strip">
+      <strong>Detective tip:</strong> compare <em>look for</em>, <em>look up</em>,
+      <em>look into</em> and <em>find out</em>.
+    </div>
+    <div class="card-grid" id="verbCards"></div>
+    <div class="controls">
+      <button class="primary" id="revealAll">Reveal all evidence</button>
+      <button class="danger" id="hideAll">Hide all evidence</button>
+    </div>
+  </section>
+
+  <section class="panel" id="match">
+    <h2 class="section-title">Match the Clues</h2>
+    <p class="lead">Choose the correct meaning for each phrasal verb.</p>
+    <div id="matching"></div>
+    <div class="controls">
+      <button class="primary" id="checkMatching">Check answers</button>
+      <button class="danger" id="resetMatching">Try again</button>
+    </div>
+    <div class="feedback" id="matchingSummary"></div>
+  </section>
+
+  <section class="panel" id="case">
+    <h2 class="section-title">The Missing Laptop</h2>
+    <p class="lead">Complete the police report. Use each phrasal verb once.</p>
+    <div class="mini-key" id="caseWordBank"></div>
+    <div class="case-file" id="caseFile"></div>
+    <div class="controls">
+      <button class="primary" id="checkCase">Submit police report</button>
+      <button class="danger" id="resetCase">Clear report</button>
+    </div>
+    <div class="feedback" id="caseSummary"></div>
+  </section>
+
+  <section class="panel" id="quiz">
+    <h2 class="section-title">Final Detective Challenge</h2>
+    <p class="lead">Complete all 20 questions. The sentence appears inside the yellow evidence box.</p>
+
+    <div class="quiz-box" id="quizBox">
+      <div class="quiz-progress" id="quizProgress">CLUE 1 OF 20</div>
+      <div class="question-counter" id="questionCounter"></div>
+      <div class="quiz-question" id="quizQuestion">Loading the first clue…</div>
+      <div class="options" id="quizOptions"></div>
+      <div class="feedback" id="quizFeedback"></div>
+      <div class="controls">
+        <button class="primary" id="nextQuestion" style="display:none">Next clue</button>
+      </div>
+    </div>
+
+    <div class="result" id="result">
+      <p class="big" id="resultEmoji">🏆</p>
+      <h2 id="resultTitle"></h2>
+      <p id="resultText"></p>
+      <button class="secondary" id="restartQuiz">Investigate again</button>
+    </div>
+  </section>
+
+  <footer>Crime Files · Phrasal Verb Training Division</footer>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const verbs=[
+ {verb:"look into",meaning:"investigate a problem, situation or crime",example:"The police looked into the disappearance.",type:"INVESTIGATE"},
+ {verb:"come across",meaning:"find something or meet someone by chance",example:"The detective came across a muddy footprint.",type:"DISCOVER"},
+ {verb:"work out",meaning:"solve, calculate or understand something",example:"The inspector worked out the secret code.",type:"SOLVE"},
+ {verb:"look for",meaning:"try to find a person or thing",example:"The officers looked for the missing bag.",type:"SEARCH"},
+ {verb:"find out",meaning:"discover information or learn a fact",example:"They found out who owned the car.",type:"DISCOVER"},
+ {verb:"turn up",meaning:"arrive or appear, often unexpectedly",example:"The main suspect turned up two hours late.",type:"ARRIVE"},
+ {verb:"look up",meaning:"search for information in a book or online",example:"The officer looked up the address online.",type:"SEARCH"},
+ {verb:"come up with",meaning:"think of an idea, plan, answer or excuse",example:"The suspect came up with a ridiculous excuse.",type:"THINK"}
+];
+
+let score=Number(localStorage.getItem("pvScore20")||0);
+let completed=new Set(JSON.parse(localStorage.getItem("pvCompleted20")||"[]"));
+const scoreEl=document.getElementById("score");
+const toast=document.getElementById("toast");
+
+function shuffle(array){
+ return [...array].sort(()=>Math.random()-.5);
+}
+function save(){
+ localStorage.setItem("pvScore20",score);
+ localStorage.setItem("pvCompleted20",JSON.stringify([...completed]));
+ scoreEl.textContent=score;
+ const percent=Math.round(completed.size/3*100);
+ document.getElementById("progressFill").style.width=percent+"%";
+ document.getElementById("progressText").textContent=percent+"%";
+}
+function showToast(message){
+ toast.textContent=message;
+ toast.classList.add("show");
+ clearTimeout(window.toastTimer);
+ window.toastTimer=setTimeout(()=>toast.classList.remove("show"),2300);
+}
+function addPoints(points,message){
+ score+=points;
+ save();
+ showToast("+"+points+" points · "+message);
+}
+
+document.querySelectorAll(".tab").forEach(button=>{
+ button.addEventListener("click",()=>{
+   document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+   document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));
+   button.classList.add("active");
+   document.getElementById(button.dataset.target).classList.add("active");
+ });
+});
+
+function renderCards(){
+ const holder=document.getElementById("verbCards");
+ holder.innerHTML="";
+ verbs.forEach(v=>{
+   const card=document.createElement("article");
+   card.className="verb-card";
+   card.innerHTML=`
+     <h3>${v.verb}</h3>
+     <span class="tag">${v.type}</span>
+     <p class="definition">${v.meaning}</p>
+     <p class="example">“${v.example}”</p>
+     <button class="reveal">Reveal meaning</button>
+     <button class="speak">🔊 Listen</button>
+   `;
+   card.querySelector(".reveal").onclick=()=>{
+     card.querySelector(".definition").style.display="block";
+     card.querySelector(".example").style.display="block";
+     card.querySelector(".reveal").textContent="Evidence revealed";
+   };
+   card.querySelector(".speak").onclick=()=>{
+     if("speechSynthesis" in window){
+       speechSynthesis.cancel();
+       const speech=new SpeechSynthesisUtterance(v.example);
+       speech.lang="en-GB";
+       speech.rate=.88;
+       speechSynthesis.speak(speech);
+     }
+   };
+   holder.appendChild(card);
+ });
+}
+document.getElementById("revealAll").onclick=()=>{
+ document.querySelectorAll(".definition,.example").forEach(x=>x.style.display="block");
+ document.querySelectorAll(".reveal").forEach(x=>x.textContent="Evidence revealed");
+};
+document.getElementById("hideAll").onclick=()=>{
+ document.querySelectorAll(".definition,.example").forEach(x=>x.style.display="none");
+ document.querySelectorAll(".reveal").forEach(x=>x.textContent="Reveal meaning");
+};
+
+function renderMatching(){
+ const meanings=shuffle(verbs.map(v=>v.meaning));
+ const holder=document.getElementById("matching");
+ holder.innerHTML="";
+ verbs.forEach((v,i)=>{
+   const card=document.createElement("div");
+   card.className="activity-card";
+   card.innerHTML=`
+     <label>${i+1}. ${v.verb}</label>
+     <select data-answer="${v.meaning}">
+       <option value="">Choose a definition…</option>
+       ${meanings.map(m=>`<option>${m}</option>`).join("")}
+     </select>
+     <div class="feedback"></div>
+   `;
+   holder.appendChild(card);
+ });
+ document.getElementById("matchingSummary").textContent="";
+}
+document.getElementById("checkMatching").onclick=()=>{
+ let correct=0;
+ document.querySelectorAll("#matching .activity-card").forEach(card=>{
+   const select=card.querySelector("select");
+   const feedback=card.querySelector(".feedback");
+   card.classList.remove("correct","incorrect");
+   if(select.value===select.dataset.answer){
+     correct++;
+     card.classList.add("correct");
+     feedback.innerHTML='<span class="good">✓ Correct</span>';
+   }else{
+     card.classList.add("incorrect");
+     feedback.innerHTML=`<span class="bad">✗ Correct answer: ${select.dataset.answer}</span>`;
+   }
+ });
+ document.getElementById("matchingSummary").innerHTML=
+   `<span class="${correct===8?"good":"bad"}">Score: ${correct}/8</span>`;
+ if(correct===8&&!completed.has("matching")){
+   completed.add("matching");
+   addPoints(8,"Meaning expert!");
+ }
+};
+document.getElementById("resetMatching").onclick=renderMatching;
+
+const caseData=[
+ {before:"The headteacher asked two detectives to",answer:"look into",after:"the disappearance of a school laptop."},
+ {before:"First, they began to",answer:"look for",after:"fingerprints and other evidence."},
+ {before:"One detective",answer:"came across",after:"a bus ticket under a desk."},
+ {before:"She",answer:"looked up",after:"the bus timetable on the internet."},
+ {before:"The detectives",answer:"found out",after:"that one student regularly used that bus."},
+ {before:"They",answer:"worked out",after:"that the laptop disappeared at 12:15."},
+ {before:"At 1:00, the student",answer:"turned up",after:"at the school office."},
+ {before:"He",answer:"came up with",after:"an unusual explanation for the missing laptop."}
+];
+
+function renderCase(){
+ const options=verbs.map(v=>v.verb);
+ document.getElementById("caseWordBank").innerHTML=
+   options.map(v=>`<div>${v}</div>`).join("");
+ document.getElementById("caseFile").innerHTML=
+   caseData.map((item,i)=>`
+     <div class="case-line">
+       <strong>${i+1}.</strong> ${item.before}
+       <select data-answer="${item.answer}">
+         <option value="">choose…</option>
+         ${options.map(v=>`<option>${v}</option>`).join("")}
+       </select>
+       ${item.after}
+     </div>
+   `).join("");
+ document.getElementById("caseSummary").textContent="";
+}
+document.getElementById("checkCase").onclick=()=>{
+ let correct=0;
+ document.querySelectorAll(".case-line").forEach(line=>{
+   const select=line.querySelector("select");
+   line.classList.remove("correct","incorrect");
+   if(select.value===select.dataset.answer){
+     correct++;
+     line.classList.add("correct");
+   }else{
+     line.classList.add("incorrect");
+   }
+ });
+ document.getElementById("caseSummary").innerHTML=
+   `<span class="${correct===8?"good":"bad"}">${
+     correct===8
+     ?"Case solved! Every detail is correct."
+     :correct+"/8 correct. Check the red evidence."
+   }</span>`;
+ if(correct===8&&!completed.has("case")){
+   completed.add("case");
+   addPoints(8,"Case solved!");
+ }
+};
+document.getElementById("resetCase").onclick=renderCase;
+
+/* Exactly 20 final-challenge sentences */
+const questionBank=[
+ {
+  q:"The police decided to ______ the robbery immediately.",
+  a:"look into",
+  o:["look into","look for","look up","turn up"]
+ },
+ {
+  q:"While I was cleaning the classroom, I ______ an old wallet.",
+  a:"came across",
+  o:["came across","found out","looked into","turned up"]
+ },
+ {
+  q:"Can you ______ the answer to this difficult puzzle?",
+  a:"work out",
+  o:["turn up","look for","work out","find out"]
+ },
+ {
+  q:"The detectives are ______ a tall man in a black coat.",
+  a:"looking for",
+  o:["looking into","looking up","looking for","coming up with"]
+ },
+ {
+  q:"We need to ______ who sent the anonymous message.",
+  a:"find out",
+  o:["find out","look for","turn up","come across"]
+ },
+ {
+  q:"The witness didn’t ______ at the police station.",
+  a:"turn up",
+  o:["look up","turn up","work out","come up with"]
+ },
+ {
+  q:"I didn’t recognise the street, so I ______ the address online.",
+  a:"looked up",
+  o:["looked for","looked into","looked up","found out"]
+ },
+ {
+  q:"The suspect ______ a very imaginative excuse.",
+  a:"came up with",
+  o:["came across","turned up","looked for","came up with"]
+ },
+ {
+  q:"Which phrasal verb means ‘investigate a problem or crime’?",
+  a:"look into",
+  o:["look into","look up","look for","find out"]
+ },
+ {
+  q:"Which phrasal verb means ‘arrive or appear unexpectedly’?",
+  a:"turn up",
+  o:["come across","work out","turn up","look up"]
+ },
+ {
+  q:"The detective wants to discover the hacker’s identity. She needs to ______ who it is.",
+  a:"find out",
+  o:["look up","find out","look for","turn up"]
+ },
+ {
+  q:"The officer found the key accidentally. She ______ it.",
+  a:"came across",
+  o:["worked out","came across","looked into","turned up"]
+ },
+ {
+  q:"Choose the grammatically correct sentence.",
+  a:"Look it up online.",
+  o:["Look up it online.","Look it up online.","Look online it up.","It look up online."]
+ },
+ {
+  q:"The police couldn’t ______ why the alarm went off.",
+  a:"work out",
+  o:["turn up","come across","work out","look for"]
+ },
+ {
+  q:"The criminal had to ______ a new plan quickly.",
+  a:"come up with",
+  o:["find out","turn up","come up with","look into"]
+ },
+ {
+  q:"I have lost my keys. Can you help me ______ them?",
+  a:"look for",
+  o:["look for","look into","look up","find out"]
+ },
+ {
+  q:"The headteacher promised to ______ the complaints about the missing money.",
+  a:"look into",
+  o:["look into","come across","turn up","look for"]
+ },
+ {
+  q:"If you don’t know how to spell the word, ______ it in a dictionary.",
+  a:"look up",
+  o:["find out","look into","look for","look up"]
+ },
+ {
+  q:"The suspect finally ______ three hours after the crime.",
+  a:"turned up",
+  o:["came across","turned up","worked out","looked up"]
+ },
+ {
+  q:"The officers are trying to ______ whether the painting was stolen.",
+  a:"find out",
+  o:["come up with","turn up","find out","look for"]
+ }
+];
+
+let quizQuestions=[];
+let quizIndex=0;
+let quizCorrect=0;
+let answered=false;
+
+function startQuiz(){
+ quizQuestions=shuffle(questionBank);
+ quizIndex=0;
+ quizCorrect=0;
+ answered=false;
+ document.getElementById("quizBox").style.display="block";
+ document.getElementById("result").style.display="none";
+ showQuestion();
+}
+
+function showQuestion(){
+ answered=false;
+ const item=quizQuestions[quizIndex];
+ document.getElementById("quizProgress").textContent=`CLUE ${quizIndex+1} OF 20`;
+ document.getElementById("questionCounter").textContent=
+   `Current score: ${quizCorrect} correct answer${quizCorrect===1?"":"s"}`;
+ document.getElementById("quizQuestion").textContent=item.q;
+ document.getElementById("quizFeedback").textContent="";
+ document.getElementById("nextQuestion").style.display="none";
+
+ const holder=document.getElementById("quizOptions");
+ holder.innerHTML="";
+
+ shuffle(item.o).forEach(option=>{
+   const button=document.createElement("button");
+   button.className="option";
+   button.textContent=option;
+   button.onclick=()=>answerQuestion(button,option,item.a);
+   holder.appendChild(button);
+ });
+}
+
+function answerQuestion(button,choice,answer){
+ if(answered)return;
+ answered=true;
+
+ document.querySelectorAll(".option").forEach(option=>{
+   option.disabled=true;
+   if(option.textContent===answer){
+     option.classList.add("correct");
+   }
+ });
+
+ if(choice===answer){
+   quizCorrect++;
+   button.classList.add("correct");
+   document.getElementById("quizFeedback").innerHTML=
+     '<span class="good">✓ Correct deduction!</span>';
+ }else{
+   button.classList.add("wrong");
+   document.getElementById("quizFeedback").innerHTML=
+     `<span class="bad">✗ Correct answer: “${answer}”.</span>`;
+ }
+
+ const next=document.getElementById("nextQuestion");
+ next.style.display="inline-block";
+ next.textContent=quizIndex===19?"See final result":"Next clue";
+}
+
+document.getElementById("nextQuestion").onclick=()=>{
+ quizIndex++;
+ if(quizIndex<20){
+   showQuestion();
+ }else{
+   finishQuiz();
+ }
+};
+
+function finishQuiz(){
+ document.getElementById("quizBox").style.display="none";
+ const result=document.getElementById("result");
+ result.style.display="block";
+
+ let title,text,emoji;
+ if(quizCorrect>=18){
+   title="Chief Inspector!";
+   text=`${quizCorrect}/20 — Outstanding detective work.`;
+   emoji="🏆";
+ }else if(quizCorrect>=15){
+   title="Case solved!";
+   text=`${quizCorrect}/20 — A very strong investigation.`;
+   emoji="🕵️";
+ }else if(quizCorrect>=11){
+   title="Promising detective";
+   text=`${quizCorrect}/20 — Review the difficult clues and try again.`;
+   emoji="🔎";
+ }else{
+   title="The suspect escaped!";
+   text=`${quizCorrect}/20 — Return to the evidence board before reopening the case.`;
+   emoji="🚨";
+ }
+
+ document.getElementById("resultEmoji").textContent=emoji;
+ document.getElementById("resultTitle").textContent=title;
+ document.getElementById("resultText").textContent=text;
+
+ if(!completed.has("quiz")){
+   completed.add("quiz");
+   addPoints(quizCorrect,"Final challenge completed!");
+ }else{
+   showToast("Final score: "+quizCorrect+"/20");
+ }
+}
+
+document.getElementById("restartQuiz").onclick=startQuiz;
+
+renderCards();
+renderMatching();
+renderCase();
+startQuiz();
+save();
+</script>
+</body>
+</html>
