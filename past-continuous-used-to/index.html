@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Time Crime Investigation | B1 Grammar</title>
+  <style>
+    :root{--ink:#13213c;--paper:#f6f1e6;--gold:#f3b61f;--red:#d94b4b;--green:#2b9b73;--blue:#2867a8;--muted:#667085}
+    *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink);background:radial-gradient(circle at 15% 10%,#fff7d6 0,transparent 30%),linear-gradient(135deg,#183153,#0c172b);min-height:100vh}
+    button{font:inherit}.wrap{width:min(1080px,94%);margin:auto}.top{position:sticky;top:0;z-index:10;background:#0c172bea;backdrop-filter:blur(8px);color:white;border-bottom:2px solid #ffffff22}.top .wrap{display:flex;align-items:center;justify-content:space-between;padding:10px 0;gap:12px}.brand{font-weight:900;letter-spacing:.08em}.stats{display:flex;gap:10px;align-items:center}.pill{background:#ffffff16;border:1px solid #ffffff29;border-radius:999px;padding:7px 12px;font-weight:800}.hero{color:white;text-align:center;padding:42px 0 22px}.hero h1{font-size:clamp(2rem,7vw,4.5rem);margin:0;line-height:.95;text-shadow:0 4px 0 #0005}.hero h1 span{color:var(--gold)}.hero p{font-size:1.1rem;max-width:680px;margin:18px auto;color:#dbe6f6}.panel{background:var(--paper);border:3px solid #fff;border-radius:24px;box-shadow:0 16px 45px #0005;margin:20px auto;padding:clamp(18px,4vw,36px)}
+    .case-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:16px 0 26px}.tab{border:0;border-radius:14px;padding:12px 8px;background:#dde4ed;color:var(--ink);font-weight:900;cursor:pointer}.tab.active{background:var(--gold);box-shadow:0 4px 0 #c88d00}.tab.done{background:#bdebd9}.screen{display:none}.screen.active{display:block}.label{color:var(--blue);font-weight:950;letter-spacing:.12em;text-transform:uppercase}.screen h2{font-size:clamp(1.7rem,4vw,2.6rem);margin:5px 0 12px}.brief{border-left:6px solid var(--gold);background:#fff;padding:14px 18px;border-radius:0 14px 14px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.file{background:#fff;border:2px solid #dce1e7;border-radius:16px;padding:18px}.file h3{margin-top:0}.formula{background:#13213c;color:white;border-radius:10px;padding:12px;font-size:1.05rem;text-align:center;font-weight:900}.timeline{position:relative;margin:25px 12px 10px;height:68px}.timeline:before{content:"";position:absolute;top:26px;left:0;right:0;height:8px;border-radius:8px;background:var(--gold)}.event{position:absolute;top:0;left:61%;text-align:center;font-weight:900}.event:after{content:"";display:block;margin:4px auto;width:4px;height:35px;background:var(--red)}
+    .question{background:white;border:2px solid #dce1e7;border-radius:18px;padding:20px}.qcount{font-size:.85rem;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.08em}.prompt{font-size:1.28rem;font-weight:800;margin:12px 0 16px}.answers{display:grid;gap:10px}.answer{border:2px solid #cfd6df;border-radius:12px;background:#f8fafc;text-align:left;padding:12px 14px;cursor:pointer;font-weight:700}.answer:hover{border-color:var(--blue);transform:translateY(-1px)}.answer.correct{background:#d7f5e8;border-color:var(--green)}.answer.wrong{background:#ffe0e0;border-color:var(--red)}.answer:disabled{cursor:default}.feedback{min-height:48px;margin-top:12px;font-weight:800}.next{display:none;border:0;border-radius:12px;background:var(--ink);color:white;padding:11px 18px;font-weight:900;cursor:pointer}.next.show{display:inline-block}.progress{height:11px;background:#d9dee5;border-radius:20px;overflow:hidden;margin:0 0 18px}.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#ff7b54);transition:.35s}.result{text-align:center;padding:20px}.result .big{font-size:4rem}.result h3{font-size:2rem;margin:4px}.restart{border:0;background:var(--gold);color:#241a00;padding:12px 20px;border-radius:12px;font-weight:950;cursor:pointer}.speaking{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.card{background:#fff;border:2px dashed var(--blue);border-radius:16px;padding:16px}.card strong{color:var(--red)}footer{text-align:center;color:#dce6f5;padding:25px 10px 45px}
+    @media(max-width:720px){.case-tabs{grid-template-columns:1fr 1fr}.grid,.speaking{grid-template-columns:1fr}.brand{font-size:.8rem}.pill{padding:6px 9px}}
+  </style>
+</head>
+<body>
+  <header class="top"><div class="wrap"><div class="brand">🕵️ TIME CRIME UNIT</div><div class="stats"><span class="pill">⭐ <b id="points">0</b></span><span class="pill">Cases: <b id="cases">0</b>/3</span></div></div></header>
+  <main class="wrap">
+    <section class="hero"><h1>TIME <span>CRIME</span><br>INVESTIGATION</h1><p>Travel through past scenes, question the suspects and repair the timeline. B1 grammar training: past continuous and <em>used to</em>.</p></section>
+    <section class="panel">
+      <nav class="case-tabs">
+        <button class="tab active" data-screen="files">1. Grammar files</button>
+        <button class="tab" data-screen="cctv">2. CCTV replay</button>
+        <button class="tab" data-screen="cold">3. Cold case</button>
+        <button class="tab" data-screen="final">4. Final mission</button>
+      </nav>
+      <section id="files" class="screen active">
+        <div class="label">Detective briefing</div><h2>Open the grammar files</h2>
+        <div class="grid">
+          <article class="file"><h3>📹 Past continuous</h3><p>An action <b>in progress at a specific moment</b> in the past, or the background to another action.</p><div class="formula">was / were + verb-ing</div><p>They <b>were attacking</b> a cyclist.<br>They <b>weren't running</b> away.<br><b>Was</b> he <b>watching</b> them?</p></article>
+          <article class="file"><h3>🗃️ Used to</h3><p>A repeated past habit or state that is <b>no longer true now</b>.</p><div class="formula">used to + infinitive</div><p>He <b>used to be</b> a thief.<br>He <b>didn't use to live</b> here.<br><b>Did</b> they <b>use to know</b> her?</p></article>
+        </div>
+        <div class="brief"><b>Remember:</b> use the past simple for the shorter completed event: “While the thieves <b>were escaping</b>, the police <b>arrived</b>.” Never use <em>used to</em> for one single event.</div>
+        <div class="timeline"><div class="event">Cumberbatch saw them</div></div><p style="text-align:center"><b>The attack was continuing</b> when <b>Cumberbatch saw them</b>.</p>
+        <h3>Partner debrief</h3><div class="speaking"><div class="card">What were you doing at <strong>8 p.m. yesterday</strong>? Ask two follow-up questions.</div><div class="card">What did you <strong>use to do</strong> when you were seven? Find one thing you have in common.</div></div>
+      </section>
+      <section id="cctv" class="screen"><div class="label">Case 01</div><h2>CCTV Replay</h2><p class="brief">Choose the best reconstruction of each scene.</p><div id="cctvGame"></div></section>
+      <section id="cold" class="screen"><div class="label">Case 02</div><h2>Cold-Case Records</h2><p class="brief">Decide what was once true, but is not true now.</p><div id="coldGame"></div></section>
+      <section id="final" class="screen"><div class="label">Case 03</div><h2>The Final Time-Crime Mission</h2><p class="brief">Twenty mixed questions. Earn 15 points for every correct answer and become Chief Time Detective.</p><div id="finalGame"></div></section>
+    </section>
+  </main><footer>Created for B1 English • Unit 2: Law and Order</footer>
+<script>
+const sets={
+cctv:[
+['At 9 p.m., the detective ___ the witnesses.',['was questioning','questioned every day','used to questioning'],0,'An action was in progress at a specific past time.'],
+['While the guard was sleeping, somebody ___ the painting.',['was stealing','stole','used to steal'],1,'The shorter completed event uses the past simple.'],
+['What ___ when the alarm went off?',['did you use to do','were you doing','you were doing'],1,'Question: were + subject + verb-ing.'],
+['The suspects ___ near the bank when the officer saw them.',['were waiting','was waiting','used wait'],0,'Plural subject “suspects” takes were.'],
+['I ___ attention, so I didn’t see the number plate.',['wasn’t paying','weren’t paying','didn’t paying'],0,'Negative: was not + verb-ing.'],
+['___ it raining during the robbery?',['Did','Was','Were'],1,'“It” takes was in a past continuous question.'],
+['The police arrived while we ___ the crime scene.',['were examining','examined','used examine'],0,'The examination was already in progress.'],
+['She ___ home when she heard a scream.',['was walking','were walking','use to walk'],0,'She + was + verb-ing.']],
+cold:[
+['The old prison ___ a hotel, but it closed years ago.',['used to be','was being','use to be'],0,'Past state no longer true: used to be.'],
+['The officer didn’t ___ glasses when he was young.',['used to wear','use to wear','using to wear'],1,'After didn’t, write use (without -d).'],
+['___ your neighbourhood use to be quieter?',['Was','Did','Were'],1,'Question: Did + subject + use to + infinitive.'],
+['They ___ one bank last night.',['used to rob','robbed','were rob every night'],1,'One finished event needs the past simple.'],
+['My grandfather ___ detective stories every weekend.',['used to read','was use to read','did used to read'],0,'A repeated past habit can use used to.'],
+['People ___ smartphones to record evidence.',['didn’t use to have','didn’t used to have','weren’t use to have'],0,'Negative: didn’t use to + infinitive.'],
+['Where did the inspector ___ before he moved here?',['used to work','use to work','was working always'],1,'After did, use the base form use.'],
+['I ___ afraid of dogs, but now I love them.',['was using to be','used to be','use to being'],1,'A past state that changed: used to be.']],
+final:[
+['At midnight, the criminals ___ through a window.',['were climbing','used to climb','was climbing'],0,'They + were + verb-ing.'],
+['The witness ___ dinner when she heard the explosion.',['cooked','was cooking','used to cook once'],1,'The longer background action uses past continuous.'],
+['While I was calling the police, the suspect ___.',['escaped','was escape','used to escaping'],0,'The short completed action uses past simple.'],
+['We ___ in this street, but we moved away.',['were living yesterday','used to live','did use to lived'],1,'A past state no longer true.'],
+['He didn’t ___ so nervous.',['used to be','use to be','was use to be'],1,'After didn’t: use to.'],
+['___ they following the blue car?',['Did','Was','Were'],2,'They takes were.'],
+['What did criminals ___ before online banking?',['used to steal','use to steal','were use to steal'],1,'After did: use to.'],
+['The detective ___ the door when the lights went out.',['was opening','used to open','were opening'],0,'An action in progress interrupted by another.'],
+['We ___ TV at 10 p.m.; we were asleep.',['weren’t watching','wasn’t watching','didn’t watching'],0,'We takes were not + verb-ing.'],
+['My town ___ a police station, but now it does.',['didn’t use to have','didn’t used to have','wasn’t having'],0,'A negative past state: didn’t use to have.'],
+['When the alarm rang, everyone ___.',['was running','ran','used to run'],1,'A completed reaction uses past simple.'],
+['The victim and her friend ___ outside.',['was talking','were talking','used talking'],1,'Plural subject takes were.'],
+['I ___ fingerprints when the chief arrived.',['was checking','checked usually','use to check'],0,'The action was already in progress.'],
+['Did your brother ___ mysteries as a child?',['used to enjoy','use to enjoy','was enjoy'],1,'Did + subject + use to.'],
+['The museum guard ___ every visitor carefully in those days.',['used to watch','was watch','did used to watch'],0,'A repeated old habit.'],
+['She ___ the thief because it was dark.',['wasn’t seeing','didn’t see','didn’t used to see'],1,'See is normally a state verb here; use past simple.'],
+['At that moment, two officers ___ the building.',['were searching','used to search','was searching'],0,'Two officers = were + verb-ing.'],
+['The doorbell rang while they ___ evidence.',['discussed','were discussing','used discuss'],1,'Ongoing background action.'],
+['The criminal ___ his face, so nobody recognised him.',['was wearing a mask over','used to wore','were cover'],0,'The disguise was in progress/true during the scene.'],
+['We ___ near the courthouse when I was little.',['used to live','were live','did used to live'],0,'A past state that is no longer true.']]
+};
+let points=0,done=new Set();
+function render(key){const host=document.getElementById(key+'Game'), data=sets[key];let i=0,score=0,locked=false;
+ function draw(){if(i>=data.length){done.add(key);document.querySelector(`[data-screen="${key}"]`).classList.add('done');document.getElementById('cases').textContent=done.size;let pct=Math.round(score/data.length*100),rank=pct>=90?'Chief Time Detective':pct>=70?'Senior Investigator':pct>=50?'Junior Detective':'Detective in Training';host.innerHTML=`<div class="result"><div class="big">${pct>=70?'🏆':'🕵️'}</div><h3>${rank}</h3><p>You solved <b>${score}/${data.length}</b> clues (${pct}%).</p><button class="restart">Play this case again</button></div>`;host.querySelector('.restart').onclick=()=>{i=0;score=0;draw()};return}
+  locked=false;const q=data[i];host.innerHTML=`<div class="progress"><span style="width:${i/data.length*100}%"></span></div><div class="question"><div class="qcount">Clue ${i+1} of ${data.length}</div><div class="prompt">${q[0]}</div><div class="answers">${q[1].map((a,n)=>`<button class="answer" data-n="${n}">${a}</button>`).join('')}</div><div class="feedback"></div><button class="next">Next clue →</button></div>`;
+  host.querySelectorAll('.answer').forEach(b=>b.onclick=()=>{if(locked)return;locked=true;const n=+b.dataset.n,buttons=[...host.querySelectorAll('.answer')];buttons.forEach(x=>x.disabled=true);buttons[q[2]].classList.add('correct');const fb=host.querySelector('.feedback');if(n===q[2]){score++;points+=key==='final'?15:10;document.getElementById('points').textContent=points;fb.innerHTML='✅ Correct! '+q[3]}else{b.classList.add('wrong');fb.innerHTML='❌ Not quite. '+q[3]}host.querySelector('.next').classList.add('show')});host.querySelector('.next').onclick=()=>{i++;draw()};}
+ draw()}
+render('cctv');render('cold');render('final');
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab,.screen').forEach(x=>x.classList.remove('active'));t.classList.add('active');document.getElementById(t.dataset.screen).classList.add('active');window.scrollTo({top:150,behavior:'smooth'})});
+</script></body></html>
